@@ -37,6 +37,7 @@ node('master') {
     stage('Tests') {
         try {
             dir('tests/rest-assured') {
+                sh 'chmod a+rwx gradlew'
                 sh './gradlew clean test'
             }
         } finally {
