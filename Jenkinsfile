@@ -26,9 +26,10 @@ node('master') {
         }
     }
     stage('Push Snapshot to JFrog Artifactory'){
-      docker.withRegistry('abhaya-docker-local.jfrog.io', 'abhaya-jfrog-creds'){
+      /*docker.withRegistry('abhaya-docker-local.jfrog.io', 'abhaya-jfrog-creds'){
         dockerCmd 'push abhaya-docker-local.jfrog.io/sparktodo'
-      }
+      }*/
+      def server = Artifactory.newServer url: 'https://abhaya.jfrog.io/abhaya/docker-local/', credentialsId: 'abhaya-jfrog-creds'
       //dockerCmd 'push abhaya-docker-local.jfrog.io/sparktodo'
     }
 
