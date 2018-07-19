@@ -58,9 +58,9 @@ node('master') {
             archiveArtifacts 'tests/bobcat/target/**'
         }
 
-       /* dockerCmd 'rm -f snapshot'
+       dockerCmd 'rm -f snapshot'
         dockerCmd 'stop zalenium'
-        dockerCmd 'rm zalenium'*/
+        dockerCmd 'rm zalenium'
     }
      stage('Push Snapshot to JFrog Artifactory'){
        // Create an Artifactory server instance:
