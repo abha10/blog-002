@@ -88,10 +88,10 @@ node('master') {
 
     stage('Deploy @ Prod') {
         dockerCmd "run -d -p 9999:9999 --name 'production' abhaya-docker-local.jfrog.io/sparktodo:${releasedVersion}"
-    }
+    }*/
   }
 }
-*/
+
 def dockerCmd(args) {
     sh "sudo ${DOCKER}/docker ${args}"
 }
