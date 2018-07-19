@@ -58,9 +58,9 @@ node('master') {
             archiveArtifacts 'tests/bobcat/target/**'
         }
 
-        dockerCmd 'rm -f snapshot'
+       /* dockerCmd 'rm -f snapshot'
         dockerCmd 'stop zalenium'
-        dockerCmd 'rm zalenium'
+        dockerCmd 'rm zalenium'*/
     }
      stage('Push Snapshot to JFrog Artifactory'){
        def server = Artifactory.server('abhaya-docker-artifactory')
@@ -73,7 +73,7 @@ node('master') {
         //dockerCmd 'push abhaya-docker-local.jfrog.io/sparktodo:SNAPSHOT'
     }
 
-    stage('Release') {
+    /*stage('Release') {
         withMaven(maven: 'Maven 3') {
             dir('app') {
                 releasedVersion = getReleasedVersion()
@@ -91,7 +91,7 @@ node('master') {
     }
   }
 }
-
+*/
 def dockerCmd(args) {
     sh "sudo ${DOCKER}/docker ${args}"
 }
