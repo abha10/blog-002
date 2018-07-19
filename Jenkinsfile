@@ -38,7 +38,7 @@ node('master') {
     stage('Deploy') {
         stage('Deploy') {
             dir('app') {
-                dockerCmd 'run -d -p 9999:9999 --name "snapshot" --network="host" automatingguy/sparktodo:SNAPSHOT'
+                dockerCmd 'run -d -p 9999:9999 --name "snapshot" --network="host" abhaya-docker-local.jfrog.io/sparktodo:SNAPSHOT'
             }
         }
     }
@@ -55,7 +55,7 @@ node('master') {
         }
 
         dockerCmd 'rm -f snapshot'
-        dockerCmd 'run -d -p 9999:9999 --name "snapshot" --network="host" automatingguy/sparktodo:SNAPSHOT'
+        dockerCmd 'run -d -p 9999:9999 --name "snapshot" --network="host" abhaya-docker-local.jfrog.io/sparktodo:SNAPSHOT'
 
         try {
             withMaven(maven: 'Maven 3') {
@@ -78,16 +78,16 @@ node('master') {
             dir('app') {
                 releasedVersion = getReleasedVersion()
                 withCredentials([usernamePassword(credentialsId: 'github', passwordVariable: 'password', usernameVariable: 'username')]) {
-                    sh "git config user.email test@automatingguy.com && git config user.name Jenkins"
+                    sh "git config user.email ghatkar.abhaya@gmail.com && git config user.name abha10"
                     sh "mvn release:prepare release:perform -Dusername=${username} -Dpassword=${password}"
                 }
-                dockerCmd "build --tag automatingguy/sparktodo:${releasedVersion} ."
+                dockerCmd "build --tag abhaya-docker-local.jfrog.io/sparktodo:${releasedVersion} ."
             }
         }
     }
 
     stage('Deploy @ Prod') {
-        dockerCmd "run -d -p 9999:9999 --name 'production' automatingguy/sparktodo:${releasedVersion}"
+        dockerCmd "run -d -p 9999:9999 --name 'production' abhaya-docker-local.jfrog.io/sparktodo:${releasedVersion}"
     }
   }
 }
