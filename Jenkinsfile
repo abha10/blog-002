@@ -25,22 +25,12 @@ node('master') {
             }
         }
     }
-    stage('Push Snapshot to JFrog Artifactory'){
-     // def server = Artifactory.server('abhaya-docker-artifactory')
-      //def rtDocker = Artifactory.docker server: server
-      //def buildInfo = rtDocker.push 'https://abhaya.jfrog.io/abhaya/docker-local/sparktodo:SNAPSHOT', 'docker-local'
-      // Publish the build-info to Artifactory:
-      //server.publishBuildInfo buildInfo
-      dockerCmd 'login -u admin -p 65VEySG41g abhaya-docker-local.jfrog.io'
-      dockerCmd 'push abhaya-docker-local.jfrog.io/sparktodo:SNAPSHOT'
-    }
+  
 
     stage('Deploy') {
-        stage('Deploy') {
-            dir('app') {
-                dockerCmd 'run -d -p 9999:9999 --name "snapshot" --network="host" abhaya-docker-local.jfrog.io/sparktodo:SNAPSHOT'
-            }
-        }
+        dir('app') {
+               dockerCmd 'run -d -p 9999:9999 --name "snapshot" --network="host" abhaya-docker-local.jfrog.io/sparktodo:SNAPSHOT'
+         }
     }
 
     stage('Tests') {
@@ -71,6 +61,15 @@ node('master') {
         dockerCmd 'rm -f snapshot'
         dockerCmd 'stop zalenium'
         dockerCmd 'rm zalenium'
+    }
+     stage('Push Snapshot to JFrog Artifactory'){
+      // def server = Artifactory.server('abhaya-docker-artifactory')
+      //def rtDocker = Artifactory.docker server: server
+      //def buildInfo = rtDocker.push 'https://abhaya.jfrog.io/abhaya/docker-local/sparktodo:SNAPSHOT', 'docker-local'
+      // Publish the build-info to Artifactory:
+      //server.publishBuildInfo buildInfo
+        dockerCmd 'login -u admin -p 65VEySG41g abhaya-docker-local.jfrog.io'
+        dockerCmd 'push abhaya-docker-local.jfrog.io/sparktodo:SNAPSHOT'
     }
 
     stage('Release') {
