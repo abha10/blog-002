@@ -21,7 +21,7 @@ node('master') {
         withMaven(maven: 'Maven 3') {
             dir('app') {
                 sh 'mvn clean package'
-                dockerCmd 'build --tag abhaya-docker-local.jfrog.io/sparktodo:SNAPSHOT .'
+                dockerCmd 'build --tag abhaya-docker-snapshot-images.jfrog.io/sparktodo:SNAPSHOT .'
             }
         }
     }
@@ -29,7 +29,7 @@ node('master') {
 
     stage('Deploy') {
         dir('app') {
-               dockerCmd 'run -d -p 9999:9999 --name "snapshot" --network="host" abhaya-docker-local.jfrog.io/sparktodo:SNAPSHOT'
+               dockerCmd 'run -d -p 9999:9999 --name "snapshot" --network="host" abhaya-docker-snapshot-images.jfrog.io/sparktodo:SNAPSHOT'
          }
     }
 
@@ -45,7 +45,7 @@ node('master') {
         }
 
         dockerCmd 'rm -f snapshot'
-        dockerCmd 'run -d -p 9999:9999 --name "snapshot" --network="host" abhaya-docker-local.jfrog.io/sparktodo:SNAPSHOT'
+        dockerCmd 'run -d -p 9999:9999 --name "snapshot" --network="host" abhaya-docker-snapshot-images.jfrog.io/sparktodo:SNAPSHOT'
 
         try {
             withMaven(maven: 'Maven 3') {
@@ -71,7 +71,7 @@ node('master') {
        
        // Push a docker image to Artifactory (here we're pushing hello-world:latest). The push method also expects
        // Artifactory repository name (<target-artifactory-repository>).
-       def buildInfo = rtDocker.push 'abhaya-docker-local.jfrog.io/sparktodo:SNAPSHOT', 'docker-local'
+       def buildInfo = rtDocker.push 'abhaya-docker-snapshot-images.jfrog.io/sparktodo:SNAPSHOT', 'docker-snapshot-images'
 
        //Publish the build-info to Artifactory:
        server.publishBuildInfo buildInfo
@@ -88,13 +88,13 @@ node('master') {
                     sh "git config user.email ghatkar.abhaya@gmail.com && git config user.name abha10"
                     sh "mvn release:prepare release:perform -Dusername=${username} -Dpassword=${password}"
                 }
-                dockerCmd "build --tag abhaya-docker-local.jfrog.io/sparktodo:${releasedVersion} ."
+                dockerCmd "build --tag abhaya-docker-snapshot-images.jfrog.io/sparktodo:${releasedVersion} ."
             }
         }
     }
 
     stage('Deploy @ Prod') {
-        dockerCmd "run -d -p 9999:9999 --name 'production' abhaya-docker-local.jfrog.io/sparktodo:${releasedVersion}"
+        dockerCmd "run -d -p 9999:9999 --name 'production' abhaya-docker-snapshot-images.jfrog.io/sparktodo:${releasedVersion}"
     }
   }
 }
