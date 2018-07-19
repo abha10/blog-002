@@ -21,7 +21,7 @@ node('master') {
         withMaven(maven: 'Maven 3') {
             dir('app') {
                 sh 'mvn clean package'
-                dockerCmd 'build --tag abhaya-docker-local.jfrog.io/sparktodo:SNAPSHOT .'
+                dockerCmd 'build --tag sparktodo:SNAPSHOT .'
             }
         }
     }
@@ -29,7 +29,7 @@ node('master') {
 
     stage('Deploy') {
         dir('app') {
-               dockerCmd 'run -d -p 9999:9999 --name "snapshot" --network="host" abhaya-docker-local.jfrog.io/sparktodo:SNAPSHOT'
+               dockerCmd 'run -d -p 9999:9999 --name "snapshot" --network="host" sparktodo:SNAPSHOT'
          }
     }
 
@@ -45,7 +45,7 @@ node('master') {
         }
 
         dockerCmd 'rm -f snapshot'
-        dockerCmd 'run -d -p 9999:9999 --name "snapshot" --network="host" abhaya-docker-local.jfrog.io/sparktodo:SNAPSHOT'
+        dockerCmd 'run -d -p 9999:9999 --name "snapshot" --network="host" sparktodo:SNAPSHOT'
 
         try {
             withMaven(maven: 'Maven 3') {
@@ -81,13 +81,13 @@ node('master') {
                     sh "git config user.email ghatkar.abhaya@gmail.com && git config user.name abha10"
                     sh "mvn release:prepare release:perform -Dusername=${username} -Dpassword=${password}"
                 }
-                dockerCmd "build --tag abhaya-docker-local.jfrog.io/sparktodo:${releasedVersion} ."
+                dockerCmd "build --tag sparktodo:${releasedVersion} ."
             }
         }
     }
 
     stage('Deploy @ Prod') {
-        dockerCmd "run -d -p 9999:9999 --name 'production' abhaya-docker-local.jfrog.io/sparktodo:${releasedVersion}"
+        dockerCmd "run -d -p 9999:9999 --name 'production' sparktodo:${releasedVersion}"
     }
   }
 }
