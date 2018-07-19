@@ -33,11 +33,7 @@ node('master') {
       // Publish the build-info to Artifactory:
       server.publishBuildInfo buildInfo
       
-      /*docker.withRegistry('https://abhaya.jfrog.io/abhaya', 'abhaya-jfrog-creds'){
-        dockerCmd 'push abhaya-docker-local.jfrog.io/sparktodo'
-      }
-     // def server = Artifactory.newServer url: 'https://abhaya.jfrog.io/abhaya/docker-local/', credentialsId: 'abhaya-jfrog-creds'
-      //dockerCmd 'push abhaya-docker-local.jfrog.io/sparktodo'
+      
     }
 
     stage('Deploy') {
