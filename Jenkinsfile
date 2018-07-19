@@ -27,13 +27,13 @@ node('master') {
     }
   
 
-    stage('Deploy') {
+    stage('Deploy @ Test Envirnoment') {
         dir('app') {
                dockerCmd 'run -d -p 9999:9999 --name "snapshot" --network="host" abhaya-docker-snapshot-images.jfrog.io/sparktodo:SNAPSHOT'
          }
     }
 
-    stage('Tests') {
+    stage('Perform Tests') {
         try {
             dir('tests/rest-assured') {
                 sh 'chmod a+rwx gradlew'
@@ -62,10 +62,21 @@ node('master') {
         dockerCmd 'stop zalenium'
         dockerCmd 'rm zalenium'
     }
-     stage('Push Snapshot to JFrog Artifactory'){
+    stage('Push Snapshots to Artifactory'){
        // Create an Artifactory server instance:
        def server = Artifactory.server('abhaya-docker-artifactory')
        
+	   def uploadSpec = """{
+		"files": [
+			{
+			"pattern": "target/*.jar",
+			"target": "ext-snapshot-local/"
+			}
+		]
+		}"""
+		server.upload(uploadSpec)
+	   
+	   
        // Create an Artifactory Docker instance. The instance stores the Artifactory credentials and the Docker daemon host address:
        def rtDocker = Artifactory.docker server: server, host: "tcp://34.248.134.77:2375"
        
@@ -78,6 +89,9 @@ node('master') {
      
         //  dockerCmd 'login -u admin -p <pwf> abhaya-docker-local.jfrog.io'
         //dockerCmd 'push abhaya-docker-local.jfrog.io/sparktodo:SNAPSHOT'
+		
+		
+		
     }
 
     stage('Release') {
@@ -92,6 +106,7 @@ node('master') {
             }
         }
     }
+    
 
     stage('Deploy @ Prod') {
         dockerCmd "run -d -p 9999:9999 --name 'production' abhaya-docker-snapshot-images.jfrog.io/sparktodo:${releasedVersion}"
