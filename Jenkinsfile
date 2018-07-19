@@ -65,18 +65,17 @@ node('master') {
     stage('Push Snapshots to Artifactory'){
        // Create an Artifactory server instance:
        def server = Artifactory.server('abhaya-docker-artifactory')
-       
-	   def uploadSpec = """{
-		"files": [
-			{
-			"pattern": "target/*.jar",
-			"target": "ext-snapshot-local/"
-			}
-		]
-		}"""
-		server.upload(uploadSpec)
+       def uploadSpec = """{
+	"files": [
+		{
+		"pattern": "target/*.jar",
+		"target": "ext-snapshot-local/"
+		}
+	]
+	}"""
+	server.upload(uploadSpec)
 	   
-	   
+	/*   
        // Create an Artifactory Docker instance. The instance stores the Artifactory credentials and the Docker daemon host address:
        def rtDocker = Artifactory.docker server: server, host: "tcp://34.248.134.77:2375"
        
@@ -89,11 +88,11 @@ node('master') {
      
         //  dockerCmd 'login -u admin -p <pwf> abhaya-docker-local.jfrog.io'
         //dockerCmd 'push abhaya-docker-local.jfrog.io/sparktodo:SNAPSHOT'
-		
+	*/	
 		
 		
     }
-
+/*
     stage('Release') {
         withMaven(maven: 'Maven 3') {
             dir('app') {
@@ -110,7 +109,7 @@ node('master') {
 
     stage('Deploy @ Prod') {
         dockerCmd "run -d -p 9999:9999 --name 'production' abhaya-docker-snapshot-images.jfrog.io/sparktodo:${releasedVersion}"
-    }
+    }*/
   }
 }
 
