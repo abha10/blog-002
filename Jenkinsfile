@@ -63,17 +63,24 @@ node('master') {
         dockerCmd 'rm zalenium'*/
     }
      stage('Push Snapshot to JFrog Artifactory'){
+       // Create an Artifactory server instance:
        def server = Artifactory.server('abhaya-docker-artifactory')
-        def rtDocker = Artifactory.docker server: server, host: "tcp://34.248.134.77:2375"
-        //def rtDocker = Artifactory.docker server: server
-      def buildInfo = rtDocker.push 'abhaya-docker-local.jfrog.io/sparktodo:SNAPSHOT', 'docker-local'
-    //   Publish the build-info to Artifactory:
-      server.publishBuildInfo buildInfo
-      //  dockerCmd 'login -u admin -p 65VEySG41g abhaya-docker-local.jfrog.io'
+       
+       // Create an Artifactory Docker instance. The instance stores the Artifactory credentials and the Docker daemon host address:
+       def rtDocker = Artifactory.docker server: server, host: "tcp://34.248.134.77:2375"
+       
+       // Push a docker image to Artifactory (here we're pushing hello-world:latest). The push method also expects
+       // Artifactory repository name (<target-artifactory-repository>).
+       def buildInfo = rtDocker.push 'abhaya-docker-local.jfrog.io/sparktodo:SNAPSHOT', 'docker-local'
+
+       //Publish the build-info to Artifactory:
+       server.publishBuildInfo buildInfo
+     
+        //  dockerCmd 'login -u admin -p <pwf> abhaya-docker-local.jfrog.io'
         //dockerCmd 'push abhaya-docker-local.jfrog.io/sparktodo:SNAPSHOT'
     }
 
-    /*stage('Release') {
+    stage('Release') {
         withMaven(maven: 'Maven 3') {
             dir('app') {
                 releasedVersion = getReleasedVersion()
@@ -88,7 +95,7 @@ node('master') {
 
     stage('Deploy @ Prod') {
         dockerCmd "run -d -p 9999:9999 --name 'production' abhaya-docker-local.jfrog.io/sparktodo:${releasedVersion}"
-    }*/
+    }
   }
 }
 
