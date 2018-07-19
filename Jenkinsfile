@@ -65,7 +65,7 @@ node('master') {
      stage('Push Snapshot to JFrog Artifactory'){
        def server = Artifactory.server('abhaya-docker-artifactory')
         def rtDocker = Artifactory.docker server: server, host: "tcp://34.248.134.77:2375"
-        def rtDocker = Artifactory.docker server: server
+        //def rtDocker = Artifactory.docker server: server
       def buildInfo = rtDocker.push 'https://abhaya.jfrog.io/abhaya/docker-local/sparktodo:SNAPSHOT', 'docker-local'
        Publish the build-info to Artifactory:
       server.publishBuildInfo buildInfo
