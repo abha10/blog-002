@@ -26,7 +26,14 @@ node('master') {
         }
     }
     stage('Push Snapshot to JFrog Artifactory'){
-      docker.withRegistry('https://abhaya.jfrog.io/abhaya', 'abhaya-jfrog-creds'){
+      def server = Artifactory.server('abhaya-docker-artifactory')
+      def rtDocker = Artifactory.docker server: server
+      def buildInfo = rtDocker.push 'https://abhaya.jfrog.io/abhaya/docker-local/sparktodo:SNAPSHOT', 'docker-local'
+ 
+      // Publish the build-info to Artifactory:
+      server.publishBuildInfo buildInfo
+      
+      /*docker.withRegistry('https://abhaya.jfrog.io/abhaya', 'abhaya-jfrog-creds'){
         dockerCmd 'push abhaya-docker-local.jfrog.io/sparktodo'
       }
      // def server = Artifactory.newServer url: 'https://abhaya.jfrog.io/abhaya/docker-local/', credentialsId: 'abhaya-jfrog-creds'
