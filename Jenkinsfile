@@ -100,7 +100,7 @@ node('master') {
                     sh "git config user.email ghatkar.abhaya@gmail.com && git config user.name abha10"
                     sh "mvn release:prepare release:perform -Dusername=${username} -Dpassword=${password}"
                 }
-                dockerCmd "build --tag abhaya-docker-snapshot-images.jfrog.io/sparktodo:${releasedVersion} ."
+                dockerCmd "build --tag abhaya-docker-release-images.jfrog.io/sparktodo:${releasedVersion} ."
             }
         }
     }
@@ -135,7 +135,7 @@ node('master') {
     }
 
     stage('Deploy @ Prod') {
-        dockerCmd "run -d -p 9999:9999 --name 'production' abhaya-docker-snapshot-images.jfrog.io/sparktodo:${releasedVersion}"
+        dockerCmd "run -d -p 9999:9999 --name 'production' abhaya-docker-release-images.jfrog.io/sparktodo:${releasedVersion}"
     }
   }
 }
