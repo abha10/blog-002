@@ -66,7 +66,7 @@ node('master') {
        def server = Artifactory.server('abhaya-docker-artifactory')
         def rtDocker = Artifactory.docker server: server, host: "tcp://34.248.134.77:2375"
         //def rtDocker = Artifactory.docker server: server
-      def buildInfo = rtDocker.push 'abhaya-docker-local.jfrog.io/hello-world:latest', 'docker-local'
+      def buildInfo = rtDocker.push 'hello-world:latest', 'docker-local'
     //   Publish the build-info to Artifactory:
       server.publishBuildInfo buildInfo
       //  dockerCmd 'login -u admin -p 65VEySG41g abhaya-docker-local.jfrog.io'
