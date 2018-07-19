@@ -68,7 +68,7 @@ node('master') {
        def uploadSpec = """{
 	"files": [
 		{
-		"pattern": "target/*.jar",
+		"pattern": "**/*.jar",
 		"target": "ext-snapshot-local/"
 		}
 	]
