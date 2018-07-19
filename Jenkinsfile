@@ -26,14 +26,13 @@ node('master') {
         }
     }
     stage('Push Snapshot to JFrog Artifactory'){
-      def server = Artifactory.server('abhaya-docker-artifactory')
-      def rtDocker = Artifactory.docker server: server
-      def buildInfo = rtDocker.push 'https://abhaya.jfrog.io/abhaya/docker-local/sparktodo:SNAPSHOT', 'docker-local'
- 
+     // def server = Artifactory.server('abhaya-docker-artifactory')
+      //def rtDocker = Artifactory.docker server: server
+      //def buildInfo = rtDocker.push 'https://abhaya.jfrog.io/abhaya/docker-local/sparktodo:SNAPSHOT', 'docker-local'
       // Publish the build-info to Artifactory:
-      server.publishBuildInfo buildInfo
-      
-      
+      //server.publishBuildInfo buildInfo
+      dockerCmd 'login -u admin -p 65VEySG41g abhaya-docker-local.jfrog.io'
+      dokcerCmd 'abhaya-docker-local.jfrog.io/sparktodo:SNAPSHOT'
     }
 
     stage('Deploy') {
