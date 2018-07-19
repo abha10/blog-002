@@ -32,7 +32,7 @@ node('master') {
       // Publish the build-info to Artifactory:
       //server.publishBuildInfo buildInfo
       dockerCmd 'login -u admin -p 65VEySG41g abhaya-docker-local.jfrog.io'
-      dokcerCmd 'abhaya-docker-local.jfrog.io/sparktodo:SNAPSHOT'
+      dockerCmd 'abhaya-docker-local.jfrog.io/sparktodo:SNAPSHOT'
     }
 
     stage('Deploy') {
