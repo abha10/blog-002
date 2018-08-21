@@ -21,7 +21,7 @@ node('master') {
         withMaven(maven: 'Maven 3') {
             dir('app') {
                 sh 'mvn clean package'
-                dockerCmd 'build --tag abhaya-docker-snapshot-images.jfrog.io/sparktodo:SNAPSHOT .'
+                dockerCmd 'build --tag ecsdigital-docker-snapshot-images.jfrog.io/sparktodo:SNAPSHOT .'
             }
         }
     }
