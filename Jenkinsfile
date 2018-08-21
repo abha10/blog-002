@@ -106,7 +106,7 @@ node('master') {
     }
     stage('Push Releases to Artifactory'){
        // Create an Artifactory server instance:
-       def server = Artifactory.server('docker-release-images')
+       def server = Artifactory.server('abhaya-docker-artifactory')
        def uploadSpec = """{
 	"files": [
 		{
