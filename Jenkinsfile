@@ -33,7 +33,7 @@ node('master') {
          }
     }
 
-    stage('Perform Tests for the deployed app') {
+    stage('Perform Tests') {
         try {
             dir('tests/rest-assured') {
 		    
