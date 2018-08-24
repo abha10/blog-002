@@ -1,5 +1,6 @@
 FROM java:8-jre
 
+
 COPY target/sparktodo-jar-with-dependencies.jar /opt
 
 EXPOSE 9999
