@@ -20,6 +20,7 @@ node('master') {
     stage('Build') {
         withMaven(maven: 'Maven 3') {
             dir('app') {
+		sh 'mvn clean verify sonar:sonar'
                 sh 'mvn clean package'
                 dockerCmd 'build --tag ecsdigital-docker-snapshot-images.jfrog.io/sparktodo:SNAPSHOT .'
             }
