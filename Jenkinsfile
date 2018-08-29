@@ -93,7 +93,13 @@ node('master') {
 		
 		
     }
-
+	  stage('Wait for Approval'){
+		  input 'Release project for Deployment?'
+	  /*def doesJavaRock = input(message: 'Release project for Deployment?', ok: 'Yes', 
+                        parameters: [booleanParam(defaultValue: true, 
+                        description: 'Just push the button',name: 'Yes?')])*/
+	  
+	  }
     stage('Release') {
         withMaven(maven: 'Maven 3') {
             dir('app') {
