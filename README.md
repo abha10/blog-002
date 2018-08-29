@@ -66,7 +66,9 @@ Next it will take to you to job configuration page, you need to configure your j
   3. Build your job
   
 #### Stage 2: Build your code through Pipeline
-* Add the following code to your Jenkinsfile
+This stage consists of following steps
+* Build project with Maven Build and create snapshot artifact 
+* Create a project Snapshot 
 ```
 stage('Build') {
         withMaven(maven: 'Maven 3') {
@@ -78,7 +80,10 @@ stage('Build') {
   }
 ```
  #### Stage 3: Deploy snapshot image to test environment
- * Add following code to your Jenkinsfile
+ 
+This stage consists of following steps
+* Deloy the snapshot image in Test Envirnoment
+
  ```
 stage('Deploy @ Test Envirnoment') {
         dir('app') {
@@ -87,8 +92,13 @@ stage('Deploy @ Test Envirnoment') {
     }
  ```
  #### Stage 4: Perform Tests
- * Add following code to your Jenkinsfile
+ 
+This stage consists of following steps
+* Perform Test with on snapshot image deployed in previous stage
+* Perform Maven based tests
+* And finally archive the artifacts
  ```
+ stage('Perform Test'){
         try {
             dir('tests/rest-assured') {
 		    
@@ -117,10 +127,13 @@ stage('Deploy @ Test Envirnoment') {
        dockerCmd 'rm -f snapshot'
         dockerCmd 'stop zalenium'
         dockerCmd 'rm zalenium'
+}
  ```
  #### Stage 5: Push snapshot artifacts and images to JFrog artifactory
  
- * Add following code to your Jenkinsfile
+This stage consists of following steps
+* Upload snapshot artifacts to JFrog Artifactory
+* Upload snapshot images to JFrog Artifactory 
  ```
  stage('Push Snapshots to Artifactory'){
        // Create an Artifactory server instance:
@@ -156,6 +169,10 @@ stage('Deploy @ Test Envirnoment') {
  #### Stage 6: Wait for Approval
  ^to be added
  #### Stage 7: Release and Push releases to JFrog
+ 
+This stage consists of following steps
+* Once approved Prepare the snapshot for release 
+* And push relesease artifact and image into JFrog Artifactory
  ```
  stage('Release') {
         withMaven(maven: 'Maven 3') {
@@ -199,7 +216,11 @@ stage('Deploy @ Test Envirnoment') {
 		
     }
  ```
- #### Stage 8: Deploy final release to production environment
+ #### Stage 8: Deploy release to production environment
+ 
+This stage consists of following steps
+* Finally deploy your release into production environment
+
  ```
  stage('Deploy @ Prod') {
         dockerCmd "run -d -p 9999:9999 --name 'production' ecsdigital-docker-release-images.jfrog.io/sparktodo:${releasedVersion}"
