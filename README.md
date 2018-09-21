@@ -20,7 +20,8 @@ Extensible: The Pipeline plugin supports custom extensions to its DSL [1] and mu
 The aim of this lab is to demonstrate how to you provisining environment and application deployment in a Continuous Integration/Continuous Delivery (CI/CD) process using docker containers and Jenkins Pipeline respectively.
 
 ### The infrastucture Architecture
-![](images/playground-infra.png)
+
+![](images/playground-infrastructure.png)
 
 The tools used to create the examples for this lab are:
 * **Docker** to create infrastructure for this lab
