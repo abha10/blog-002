@@ -19,6 +19,9 @@ Extensible: The Pipeline plugin supports custom extensions to its DSL [1] and mu
 
 The aim of this lab is to demonstrate how to you provisining environment and application deployment in a Continuous Integration/Continuous Delivery (CI/CD) process using docker containers and Jenkins Pipeline respectively.
 
+### The infrastucture Architecture
+![](images/playground-infra.png)
+
 The tools used to create the examples for this lab are:
 * **Docker** to create infrastructure for this lab
 * **SonarQube** for code quality analysis to the CI/CD process.
@@ -27,11 +30,10 @@ The tools used to create the examples for this lab are:
 * **JFrog Artifactory** is the repository for artifact binaries and docker images.
 * **Jenkins** to orchestrate the CI/CD pipeline flow.
 
-### The infrastucture Architecture
-![](images/playground-infra.png)
 
 ### Pipeline flow
 Now let's explore the CI/CD pipeline flow built for this lab. 
+
 ![](images/playground-pipeline.png)
 
 ## Hands On!!
