@@ -28,7 +28,7 @@ The tools used to create the examples for this lab are:
 * **Jenkins** to orchestrate the CI/CD pipeline flow.
 
 ### The infrastucture Architecture
-Infra image to be added
+![](images/playground-infra.png)
 
 ### Pipeline flow
 Now let's explore the CI/CD pipeline flow built for this lab. 
