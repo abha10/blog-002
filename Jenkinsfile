@@ -29,7 +29,14 @@ node('master') {
   
 
     stage('Deploy @ Test Envirnoment') {
-        dir('app') {
+       
+	 //'Run Zalenium': {
+            dockerCmd '''run -d --name zalenium -p 4440:4440 \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            --network="host" \
+            --privileged dosel/zalenium:3.4.0a start --videoRecordingEnabled false --chromeContainers 1 --firefoxContainers 0'''
+        //}
+         dir('app') {
                dockerCmd 'run -d -p 9999:9999 --name "snapshot" --network="host" ecsdigital-docker-snapshot-images.jfrog.io/sparktodo:SNAPSHOT'
          }
     }
