@@ -32,7 +32,7 @@ The tools used to create the examples for this lab are:
 
 ### Pipeline flow
 Now let's explore the CI/CD pipeline flow built for this lab. 
-![](images/pipelineflow.PNG)
+![](images/playground-pipeline.PNG)
 
 ## Hands On!!
 ### Login to Jenkins Dashboard 
