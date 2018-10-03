@@ -81,7 +81,7 @@ node('master') {
 	   
 	   
        // Create an Artifactory Docker instance. The instance stores the Artifactory credentials and the Docker daemon host address:
-       def rtDocker = Artifactory.docker server: server, host: "tcp://34.248.134.77:2375"
+       def rtDocker = Artifactory.docker server: server, host: "tcp://172.31.3.22:2375"
        
        // Push a docker image to Artifactory (here we're pushing hello-world:latest). The push method also expects
        // Artifactory repository name (<target-artifactory-repository>).
