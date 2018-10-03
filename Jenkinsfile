@@ -17,7 +17,7 @@ node('master') {
             dir('app') {
 		sh 'mvn clean verify sonar:sonar'
                 sh 'mvn clean package'
-                dockerCmd 'build --tag ecsdigital-docker-snapshot-images.jfrog.io/sparktodo:SNAPSHOT .'
+                dockerCmd 'build --tag digitaldemo-docker-snapshot-images.jfrog.io/sparktodo:SNAPSHOT .'
             }
         }
     }
@@ -32,7 +32,7 @@ node('master') {
             --privileged dosel/zalenium:3.4.0a start --videoRecordingEnabled false --chromeContainers 1 --firefoxContainers 0'''
         //}
          dir('app') {
-               dockerCmd 'run -d -p 9999:9999 --name "snapshot" --network="host" ecsdigital-docker-snapshot-images.jfrog.io/sparktodo:SNAPSHOT'
+               dockerCmd 'run -d -p 9999:9999 --name "snapshot" --network="host" digitaldemo-docker-snapshot-images.jfrog.io/sparktodo:SNAPSHOT'
          }
     }
 
@@ -49,7 +49,7 @@ node('master') {
         }
 
         dockerCmd 'rm -f snapshot'
-        dockerCmd 'run -d -p 9999:9999 --name "snapshot" --network="host" ecsdigital-docker-snapshot-images.jfrog.io/sparktodo:SNAPSHOT'
+        dockerCmd 'run -d -p 9999:9999 --name "snapshot" --network="host" digitaldemo-docker-snapshot-images.jfrog.io/sparktodo:SNAPSHOT'
 
         try {
             withMaven(maven: 'Maven 3') {
@@ -85,7 +85,7 @@ node('master') {
        
        // Push a docker image to Artifactory (here we're pushing hello-world:latest). The push method also expects
        // Artifactory repository name (<target-artifactory-repository>).
-       def buildInfo = rtDocker.push 'ecsdigital-docker-snapshot-images.jfrog.io/sparktodo:SNAPSHOT', 'docker-snapshot-images'
+       def buildInfo = rtDocker.push 'digitaldemo-docker-snapshot-images.jfrog.io/sparktodo:SNAPSHOT', 'docker-snapshot-images'
 
        //Publish the build-info to Artifactory:
        server.publishBuildInfo buildInfo
@@ -110,7 +110,7 @@ node('master') {
                     sh "git config user.email ghatkar.abhaya@gmail.com && git config user.name abha10"
                     sh "mvn release:prepare release:perform -Dusername=${username} -Dpassword=${password}"
                 }
-                dockerCmd "build --tag ecsdigital-docker-release-images.jfrog.io/sparktodo:${releasedVersion} ."
+                dockerCmd "build --tag digitaldemo-docker-release-images.jfrog.io/sparktodo:${releasedVersion} ."
             }
         }
     }
@@ -133,7 +133,7 @@ node('master') {
        
        // Push a docker image to Artifactory (here we're pushing hello-world:latest). The push method also expects
        // Artifactory repository name (<target-artifactory-repository>).
-       def buildInfo = rtDocker.push "ecsdigital-docker-release-images.jfrog.io/sparktodo:${releasedVersion}", 'docker-release-images'
+       def buildInfo = rtDocker.push "digitaldemo-docker-release-images.jfrog.io/sparktodo:${releasedVersion}", 'docker-release-images'
 
        //Publish the build-info to Artifactory:
        server.publishBuildInfo buildInfo
@@ -145,7 +145,7 @@ node('master') {
     }
 
     stage('Deploy @ Prod') {
-        dockerCmd "run -d -p 9999:9999 --name 'production' ecsdigital-docker-release-images.jfrog.io/sparktodo:${releasedVersion}"
+        dockerCmd "run -d -p 9999:9999 --name 'production' digitaldemo-docker-release-images.jfrog.io/sparktodo:${releasedVersion}"
     }
   }
 }
