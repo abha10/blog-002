@@ -15,7 +15,10 @@ node('master') {
     stage('Build') {
         withMaven(maven: 'Maven 3') {
             dir('app') {
-		sh 'mvn clean verify sonar:sonar'
+		    withSonarQubeEnv('sonar'){
+		    	sh 'mvn clean verify sonar:sonar'
+		    }
+		
                 sh 'mvn clean package'
                 dockerCmd 'build --tag digitaldemo-docker-snapshot-images.jfrog.io/sparktodo:SNAPSHOT .'
             }
