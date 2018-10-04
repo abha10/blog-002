@@ -17,9 +17,9 @@ node('master') {
     }
         withMaven(maven: 'Maven 3') {
             dir('app') {
-		    withSonarQubeEnv('sonar'){
+		  /*  withSonarQubeEnv('sonar'){
 		    	sh 'mvn clean verify sonar:sonar'
-		    }
+		    }*/
 		    sh 'mvn clean package'
 			app = docker.build("digitaldemo-docker-snapshot-images.jfrog.io/sparktodo:SNAPSHOT","-f ./app/Dockerfile")
             }
