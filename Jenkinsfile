@@ -20,7 +20,8 @@ node('master') {
 		    }
 		
                 sh 'mvn clean package'
-                dockerCmd 'build --tag digitaldemo-docker-snapshot-images.jfrog.io/sparktodo:SNAPSHOT .'
+		docker.build("digitaldemo-docker-snapshot-images.jfrog.io/sparktodo:SNAPSHOT",".")
+                //dockerCmd 'build --tag  .'
             }
         }
     }
