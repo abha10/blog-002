@@ -35,7 +35,7 @@ node('master') {
     stage('Tests') {
        // dockerCmd 'run -d -p 9999:9999 --name "snapshot" --network="host" automatingguy/sparktodo:SNAPSHOT'
       echo 'Testing Endpoint'
-      sh "response=$(curl --write-out %{http_code} --silent --output /dev/null http://localhost:9999)"
+      def response = $(curl --write-out %{http_code} --silent --output /dev/null http://localhost:9999)
       def testing = (response == 200) ? echo "Testing Successfull" : echo "Testing Failed with status code ${response}"
       dockerCmd 'rm -f snapshot'
     }
