@@ -38,7 +38,7 @@ node('master') {
       echo 'Testing Endpoint'
       /*def response = $(curl --write-out %{http_code} --silent --output /dev/null http://localhost:9999)
       def testing = (response == 200) ? echo "Testing Successfull" : echo "Testing Failed with status code ${response}"*/
-      @Grab('com.github.groovy-wslite:groovy-wslite:1.1.2')
+      //@Grab('com.github.groovy-wslite:groovy-wslite:1.1.2')
       
 
       def client = new RESTClient("http://localhost:9999")
