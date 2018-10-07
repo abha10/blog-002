@@ -70,7 +70,8 @@ if(getRC.equals(200)) {
       
      // def response = $(curl --write-out %{http_code} --silent --output /dev/null http://localhost:9999)
       def response = sh('curl --write-out %{http_code} --silent --output /dev/null http://localhost:9999')
-      def testing = (response == 200) ? (echo "Testing Successfull") : (echo "Testing Failed with status code ${response})"
+      //def testing = (response == 200) ? (echo "Testing Successfull") : (echo "Testing Failed with status code ${response})"
+      echo response
       dockerCmd 'rm -f snapshot'
     }
 
