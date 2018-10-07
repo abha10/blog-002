@@ -61,19 +61,19 @@ node('master') {
 */
 // GET
 
-      
- /*def get = new URL("http://localhost:9999").openConnection();
+   sleep(time:10,unit:"SECONDS")   
+ def get = new URL("http://localhost:9999").openConnection();
 def getRC = get.getResponseCode();
 println(getRC);
 if(getRC.equals(200)) {
     println(get.getInputStream().getText());
-}  */
-      sh 'sleep 60'
+}  
       
-     // def response = $(curl --write-out %{http_code} --silent --output /dev/null http://localhost:9999)
-      def response = sh('curl --write-out %{http_code} --silent --output /dev/null http://localhost:9999')
+      
+   
+   //   def response = sh('curl --write-out %{http_code} --silent --output /dev/null http://localhost:9999')
       //def testing = (response == 200) ? (echo "Testing Successfull") : (echo "Testing Failed with status code ${response})"
-        echo response
+        //echo response
         
       }finally{
         dockerCmd 'rm -f snapshot'
