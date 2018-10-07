@@ -42,7 +42,7 @@ node('master') {
         HttpURLConnection connection = url.openConnection();    
        
         connection.setRequestMethod("GET");
-        connection.setRequestProperty("Cookie", cookie); 
+        //connection.setRequestProperty("Cookie", cookie); 
         connection.doOutput = true;   
  
         //get the request    
