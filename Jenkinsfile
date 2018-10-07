@@ -37,7 +37,7 @@ node('master') {
       echo 'Testing Endpoint'
       /*def response = $(curl --write-out %{http_code} --silent --output /dev/null http://localhost:9999)
       def testing = (response == 200) ? echo "Testing Successfull" : echo "Testing Failed with status code ${response}"*/
-       URL url = new URL('http://localhost:9999');    
+      /* URL url = new URL('http://localhost:9999');    
         HttpURLConnection connection = url.openConnection();    
        
         connection.setRequestMethod("GET");
@@ -49,7 +49,7 @@ node('master') {
         print $resp.statusCode
         //parse the response    
         //parseResponse(connection);    
- /*
+ 
         if(failure){    
             error("\nGET from URL: $requestUrl\n  HTTP Status: $resp.statusCode\n  Message: $resp.message\n  Response Body: $resp.body");    
         }    
@@ -57,6 +57,23 @@ node('master') {
         this.printDebug("Request (GET):\n  URL: $requestUrl");    
         this.printDebug("Response:\n  HTTP Status: $resp.statusCode\n  Message: $resp.message\n  Response Body: $resp.body");    
 */
+      URL url = new URL('http://localhost:9999');    
+    HttpURLConnection connection = url.openConnection();    
+
+    connection.setRequestMethod("GET");    
+
+    //get the request    
+    connection.connect();    
+
+    //parse the response    
+    HttpResponse resp = new HttpResponse(connection);    
+
+    if(resp.isFailure()){    
+        error("\nGET from URL: $requestUrl\n  HTTP Status: $resp.statusCode\n  Message: $resp.message\n  Response Body: $resp.body");    
+    }    
+
+    this.printDebug("Request (GET):\n  URL: $requestUrl");    
+    this.printDebug("Response:\n  HTTP Status: $resp.statusCode\n  Message: $resp.message\n  Response Body: $resp.body");    
       dockerCmd 'rm -f snapshot'
     }
 
