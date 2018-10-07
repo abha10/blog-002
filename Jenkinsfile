@@ -120,10 +120,10 @@ if(getRC.equals(200)) {
             dir('app') {
                 releasedVersion = getReleasedVersion()
                 withCredentials([usernamePassword(credentialsId: 'github-cred', passwordVariable: 'password', usernameVariable: 'username')]) {
-                    sh "git config user.email test@digitaldemo-docker-snapshot-images.jfrog.io.com && git config user.name Jenkins"
+                    sh "git config user.email test@digitaldemo-docker-release-images.jfrog.io.com && git config user.name Jenkins"
                     sh "mvn release:prepare release:perform -Dusername=${username} -Dpassword=${password}"
                 }
-                dockerCmd "build --tag digitaldemo-docker-snapshot-images.jfrog.io/sparktodo:${releasedVersion} ."
+                dockerCmd "build --tag digitaldemo-docker-release-images.jfrog.io/sparktodo:${releasedVersion} ."
             }
         }
     }
@@ -159,7 +159,7 @@ if(getRC.equals(200)) {
     }
 
     stage('Deploy @ Prod') {
-        dockerCmd "run -d -p 9999:9999 --name 'production' digitaldemo-docker-snapshot-images.jfrog.io/sparktodo:${releasedVersion}"
+        dockerCmd "run -d -p 9999:9999 --name 'production' digitaldemo-docker-release-images.jfrog.io/sparktodo:${releasedVersion}"
     }
   }
 }
