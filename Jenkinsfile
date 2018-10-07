@@ -58,12 +58,19 @@ node('master') {
         this.printDebug("Response:\n  HTTP Status: $resp.statusCode\n  Message: $resp.message\n  Response Body: $resp.body");    
 */
 // GET
-def get = new URL("http://localhost:9999").openConnection();
+
+      
+ /*def get = new URL("http://localhost:9999").openConnection();
 def getRC = get.getResponseCode();
 println(getRC);
 if(getRC.equals(200)) {
     println(get.getInputStream().getText());
-}  
+}  */
+      
+      
+     // def response = $(curl --write-out %{http_code} --silent --output /dev/null http://localhost:9999)
+      def response = sh('curl --write-out %{http_code} --silent --output /dev/null http://localhost:9999')
+      def testing = (response == 200) ? echo "Testing Successfull" : echo "Testing Failed with status code ${response}"
       dockerCmd 'rm -f snapshot'
     }
 
