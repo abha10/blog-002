@@ -35,7 +35,7 @@ node('master') {
     }
 
     stage('Tests') {
-        dockerCmd 'run -d -p 9999:9999 --name "snapshot" --network="host" automatingguy/sparktodo:SNAPSHOT'
+       // dockerCmd 'run -d -p 9999:9999 --name "snapshot" --network="host" automatingguy/sparktodo:SNAPSHOT'
 
         try {
             withMaven(maven: 'Maven 3') {
