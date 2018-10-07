@@ -33,6 +33,8 @@ node('master') {
     }
 
     stage('Tests') {
+      
+      try{
        // dockerCmd 'run -d -p 9999:9999 --name "snapshot" --network="host" automatingguy/sparktodo:SNAPSHOT'
       echo 'Testing Endpoint'
       /*def response = $(curl --write-out %{http_code} --silent --output /dev/null http://localhost:9999)
@@ -66,13 +68,18 @@ println(getRC);
 if(getRC.equals(200)) {
     println(get.getInputStream().getText());
 }  */
-      
+      sh 'sleep 60'
       
      // def response = $(curl --write-out %{http_code} --silent --output /dev/null http://localhost:9999)
       def response = sh('curl --write-out %{http_code} --silent --output /dev/null http://localhost:9999')
       //def testing = (response == 200) ? (echo "Testing Successfull") : (echo "Testing Failed with status code ${response})"
-      echo response
-      dockerCmd 'rm -f snapshot'
+        echo response
+        
+      }finally{
+        dockerCmd 'rm -f snapshot'
+      }
+     
+      
     }
 
     stage('Release') {
