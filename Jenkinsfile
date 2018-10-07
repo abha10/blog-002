@@ -21,21 +21,21 @@ node('master') {
         withMaven(maven: 'Maven 3') {
             dir('app') {
                 sh 'mvn clean package'
-                dockerCmd 'build --tag automatingguy/sparktodo:SNAPSHOT .'
+                dockerCmd 'build --tag digitaldemo-docker-snapshot-images.jfrog.io/sparktodo:SNAPSHOT .'
             }
         }
     }
 
     stage('Deploy') {
             dir('app') {
-                dockerCmd 'run -d -p 9999:9999 --name "snapshot" --network="host" automatingguy/sparktodo:SNAPSHOT'
+                dockerCmd 'run -d -p 9999:9999 --name "snapshot" --network="host" digitaldemo-docker-snapshot-images.jfrog.io/sparktodo:SNAPSHOT'
             }
     }
 
     stage('Tests') {
       
       try{
-       // dockerCmd 'run -d -p 9999:9999 --name "snapshot" --network="host" automatingguy/sparktodo:SNAPSHOT'
+       // dockerCmd 'run -d -p 9999:9999 --name "snapshot" --network="host" digitaldemo-docker-snapshot-images.jfrog.io/sparktodo:SNAPSHOT'
       echo 'Testing Endpoint'
       /*def response = $(curl --write-out %{http_code} --silent --output /dev/null http://localhost:9999)
       def testing = (response == 200) ? echo "Testing Successfull" : echo "Testing Failed with status code ${response}"*/
@@ -120,10 +120,10 @@ if(getRC.equals(200)) {
             dir('app') {
                 releasedVersion = getReleasedVersion()
                 withCredentials([usernamePassword(credentialsId: 'github-cred', passwordVariable: 'password', usernameVariable: 'username')]) {
-                    sh "git config user.email test@automatingguy.com && git config user.name Jenkins"
+                    sh "git config user.email test@digitaldemo-docker-snapshot-images.jfrog.io.com && git config user.name Jenkins"
                     sh "mvn release:prepare release:perform -Dusername=${username} -Dpassword=${password}"
                 }
-                dockerCmd "build --tag automatingguy/sparktodo:${releasedVersion} ."
+                dockerCmd "build --tag digitaldemo-docker-snapshot-images.jfrog.io/sparktodo:${releasedVersion} ."
             }
         }
     }
@@ -159,7 +159,7 @@ if(getRC.equals(200)) {
     }
 
     stage('Deploy @ Prod') {
-        dockerCmd "run -d -p 9999:9999 --name 'production' automatingguy/sparktodo:${releasedVersion}"
+        dockerCmd "run -d -p 9999:9999 --name 'production' digitaldemo-docker-snapshot-images.jfrog.io/sparktodo:${releasedVersion}"
     }
   }
 }
