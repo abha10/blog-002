@@ -49,7 +49,7 @@ node('master') {
         connection.connect();    
  
         //parse the response    
-        parseResponse(connection);    
+        //parseResponse(connection);    
  
         if(failure){    
             error("\nGET from URL: $requestUrl\n  HTTP Status: $resp.statusCode\n  Message: $resp.message\n  Response Body: $resp.body");    
