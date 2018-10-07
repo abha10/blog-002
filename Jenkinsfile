@@ -9,12 +9,12 @@ node('master') {
         deleteDir()
         parallel Checkout: {
             checkout scm
-        }, 'Run Zalenium': {
+        }/*, 'Run Zalenium': {
             dockerCmd '''run -d --name zalenium -p 4444:4444 \
             -v /var/run/docker.sock:/var/run/docker.sock \
             --network="host" \
             --privileged dosel/zalenium:3.4.0a start --videoRecordingEnabled false --chromeContainers 1 --firefoxContainers 0'''
-        }
+        }*/
     }
 
     stage('Build') {
@@ -36,21 +36,7 @@ node('master') {
 
     stage('Tests') {
        // dockerCmd 'run -d -p 9999:9999 --name "snapshot" --network="host" automatingguy/sparktodo:SNAPSHOT'
-
-        try {
-            withMaven(maven: 'Maven 3') {
-                dir('tests/bobcat') {
-                    sh 'mvn clean test -Dmaven.test.failure.ignore=true'
-                }
-            }
-        } finally {
-            junit testResults: 'tests/bobcat/target/*.xml', allowEmptyResults: true
-            archiveArtifacts 'tests/bobcat/target/**'
-        }
-
-        dockerCmd 'rm -f snapshot'
-        dockerCmd 'stop zalenium'
-        dockerCmd 'rm zalenium'
+      echo 'Testing Endpoint'
     }
 
     stage('Release') {
