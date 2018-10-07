@@ -42,7 +42,8 @@ node('master') {
       
 
       def client = new RESTClient("http://localhost:9999")
-      def response = client.get(include_entities:true])
+      def response = client.get()
+      echo ${response}
 
       assert 200 == response.statusCode
 //assert "John Wagenleitner" == response.json.name
