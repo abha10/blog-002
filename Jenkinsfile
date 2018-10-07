@@ -38,15 +38,25 @@ node('master') {
       echo 'Testing Endpoint'
       /*def response = $(curl --write-out %{http_code} --silent --output /dev/null http://localhost:9999)
       def testing = (response == 200) ? echo "Testing Successfull" : echo "Testing Failed with status code ${response}"*/
-      //@Grab('com.github.groovy-wslite:groovy-wslite:1.1.2')
-      
-
-      def client = new RESTClient("http://localhost:9999")
-      def response = client.get()
-      echo ${response}
-
-      assert 200 == response.statusCode
-//assert "John Wagenleitner" == response.json.name
+       URL url = new URL('http://localhost:9999');    
+        HttpURLConnection connection = url.openConnection();    
+       
+        connection.setRequestMethod("GET");
+        connection.setRequestProperty("Cookie", cookie); 
+        connection.doOutput = true;   
+ 
+        //get the request    
+        connection.connect();    
+ 
+        //parse the response    
+        parseResponse(connection);    
+ 
+        if(failure){    
+            error("\nGET from URL: $requestUrl\n  HTTP Status: $resp.statusCode\n  Message: $resp.message\n  Response Body: $resp.body");    
+        }    
+ 
+        this.printDebug("Request (GET):\n  URL: $requestUrl");    
+        this.printDebug("Response:\n  HTTP Status: $resp.statusCode\n  Message: $resp.message\n  Response Body: $resp.body");    
 
       dockerCmd 'rm -f snapshot'
     }
