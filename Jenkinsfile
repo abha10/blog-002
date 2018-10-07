@@ -82,6 +82,39 @@ if(getRC.equals(200)) {
       
     }
 
+    
+    stage('Push Snapshots to Artifactory'){
+       // Create an Artifactory server instance:
+       def server = Artifactory.server('abhaya-docker-artifactory')
+       def uploadSpec = """{
+	"files": [
+		{
+		"pattern": "**/*.jar",
+		"target": "ext-snapshot-local/"
+		}
+	]
+	}"""
+	server.upload(uploadSpec)
+	   
+	   
+       // Create an Artifactory Docker instance. The instance stores the Artifactory credentials and the Docker daemon host address:
+       def rtDocker = Artifactory.docker server: server, host: "tcp://localhost:2375"
+       
+       // Push a docker image to Artifactory (here we're pushing hello-world:latest). The push method also expects
+       // Artifactory repository name (<target-artifactory-repository>).
+       def buildInfo = rtDocker.push 'digitaldemo-docker-snapshot-images.jfrog.io/sparktodo:SNAPSHOT', 'docker-snapshot-images'
+
+       //Publish the build-info to Artifactory:
+       server.publishBuildInfo buildInfo
+     		
+    }
+	  stage('Wait for Approval'){
+		  input 'Release project for Deployment?'
+	  /*def doesJavaRock = input(message: 'Release project for Deployment?', ok: 'Yes', 
+                        parameters: [booleanParam(defaultValue: true, 
+                        description: 'Just push the button',name: 'Yes?')])*/
+	  
+	  }
     stage('Release') {
         withMaven(maven: 'Maven 3') {
             dir('app') {
@@ -93,6 +126,36 @@ if(getRC.equals(200)) {
                 dockerCmd "build --tag automatingguy/sparktodo:${releasedVersion} ."
             }
         }
+    }
+    
+    stage('Push image and Artifact Releases to Artifactory'){
+       // Create an Artifactory server instance:
+       def server = Artifactory.server('abhaya-docker-artifactory')
+       def uploadSpec = """{
+	"files": [
+		{
+		"pattern": "**/*.jar",
+		"target": "ext-release-local/"
+		}
+	]
+	}"""
+	server.upload(uploadSpec)
+	   
+	   
+       // Create an Artifactory Docker instance. The instance stores the Artifactory credentials and the Docker daemon host address:
+       def rtDocker = Artifactory.docker server: server, host: "tcp://localhost:2375"
+       
+       // Push a docker image to Artifactory (here we're pushing hello-world:latest). The push method also expects
+       // Artifactory repository name (<target-artifactory-repository>).
+       def buildInfo = rtDocker.push "digitaldemo-docker-release-images.jfrog.io/sparktodo:${releasedVersion}", 'docker-release-images'
+
+       //Publish the build-info to Artifactory:
+       server.publishBuildInfo buildInfo
+     
+        //  dockerCmd 'login -u admin -p <pwf> abhaya-docker-local.jfrog.io'
+        //dockerCmd 'push abhaya-docker-local.jfrog.io/sparktodo:SNAPSHOT'
+		
+		
     }
 
     stage('Deploy @ Prod') {
