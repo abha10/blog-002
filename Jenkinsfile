@@ -1,5 +1,4 @@
 #!groovy
-import wslite.rest.*
 
 def releasedVersion
 
@@ -47,17 +46,17 @@ node('master') {
  
         //get the request    
         connection.connect();    
- 
+        print $resp.statusCode
         //parse the response    
         //parseResponse(connection);    
- 
+ /*
         if(failure){    
             error("\nGET from URL: $requestUrl\n  HTTP Status: $resp.statusCode\n  Message: $resp.message\n  Response Body: $resp.body");    
         }    
  
         this.printDebug("Request (GET):\n  URL: $requestUrl");    
         this.printDebug("Response:\n  HTTP Status: $resp.statusCode\n  Message: $resp.message\n  Response Body: $resp.body");    
-
+*/
       dockerCmd 'rm -f snapshot'
     }
 
