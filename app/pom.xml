@@ -4,10 +4,10 @@
 
     <groupId>spark-intercooler</groupId>
     <artifactId>spark-intercooler</artifactId>
-    <version>1.28-SNAPSHOT</version>
+    <version>1.28</version>
     <scm>
         <developerConnection>scm:git:https://github.com/abha10/blog-002.git</developerConnection>
-                <tag>HEAD</tag>
+                <tag>spark-intercooler-1.28</tag>
     </scm>
 
     <build>
