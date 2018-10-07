@@ -57,23 +57,13 @@ node('master') {
         this.printDebug("Request (GET):\n  URL: $requestUrl");    
         this.printDebug("Response:\n  HTTP Status: $resp.statusCode\n  Message: $resp.message\n  Response Body: $resp.body");    
 */
-      URL url = new URL('http://localhost:9999');    
-    HttpURLConnection connection = url.openConnection();    
-
-    connection.setRequestMethod("GET");    
-
-    //get the request    
-    connection.connect();    
-
-    //parse the response    
-    HttpResponse resp = new HttpResponse(connection);    
-
-    if(resp.isFailure()){    
-        error("\nGET from URL: $requestUrl\n  HTTP Status: $resp.statusCode\n  Message: $resp.message\n  Response Body: $resp.body");    
-    }    
-
-    this.printDebug("Request (GET):\n  URL: $requestUrl");    
-    this.printDebug("Response:\n  HTTP Status: $resp.statusCode\n  Message: $resp.message\n  Response Body: $resp.body");    
+// GET
+def get = new URL("http://localhost:9999").openConnection();
+def getRC = get.getResponseCode();
+println(getRC);
+if(getRC.equals(200)) {
+    println(get.getInputStream().getText());
+}  
       dockerCmd 'rm -f snapshot'
     }
 
